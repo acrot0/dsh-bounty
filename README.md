@@ -36,6 +36,8 @@
 | issue 快照导出器 | [`scripts/check_plan_snapshot.py`](scripts/check_plan_snapshot.py) | 把 issue 面导成对账可读的快照（**可选运维工具**，需 `gh` 登录；产物不提交进仓） |
 | 项目管理规格 | [`docs/spec/悬赏与项目管理_v0.2.md`](docs/spec/悬赏与项目管理_v0.2.md) | 三方定义／声明态 vs 默认态／五类口径／退出码语义／机读口径／不适用条件 |
 | 交付证据包 | [`docs/spec/悬赏与项目管理_v0.2_交付证据.md`](docs/spec/悬赏与项目管理_v0.2_交付证据.md) | 本条（bounty-pm）的四段式 ＋ 三字段证据块（投递草案） |
+| **插件测评站生成器** | [`scripts/review_build.py`](scripts/review_build.py) | 真源 `review/data/*.json` → 产物 `review/site/*.html`（纯 stdlib、确定性、不触网；`--print` 只打印不落盘，坏真源退出码 2） |
+| **插件测评站守卫** | [`tests/test_review_build.py`](tests/test_review_build.py) | 28 条断言 ＋ 7 条定点变异（N0–N6）；`[J]` 映射面 ◦ `[K]` 落盘面（真跑子进程） |
 
 **独立仓**：所有件自包含，不依赖任何外部仓的路径或模块——所有命令都在本仓根下跑，
 只用 Python 标准库（**零第三方依赖、不触网**）。
@@ -72,6 +74,11 @@ python -X utf8 scripts/check_plan.py --dry-run   # 对账表 ＋ 五类不一致
 python -X utf8 scripts/check_plan.py --check     # 漂移检测：0=无漂移 / 1=检出漂移或输入坏（读仓内夹具）
 python -X utf8 tests/test_check_plan.py
 python -X utf8 tests/test_check_plan.py --mutate
+
+# 3f. 插件测评站（真源 review/data/*.json → 六页产物；断言 ＋ 定点变异自证）
+python -X utf8 scripts/review_build.py
+python -X utf8 tests/test_review_build.py
+python -X utf8 tests/test_review_build.py --mutate
 
 # 3d. 审核员机制：晋升评估 ＋ 授权面（账本 → JSON；只读、纯函数）
 python -X utf8 scripts/bounty_board.py --promotion-out docs/bounty/promotion.json
